@@ -12,7 +12,9 @@ class ItemViewModel : ViewModel() {
         viewModelScope.launch {
             val allItems = RetrofitInstance.api.getItems()
             val filtered = allItems.filter { it.name.isNotBlank() }
-                .sortedWith(compareBy({ it.listId }, { it.name }))
+                .sortedWith(compareBy<Item> { it.listId }.thenBy {
+                    Regex("""\d+""").find(it.name)?.value?.toIntOrNull() ?: Int.MAX_VALUE
+                })
                 .groupBy { it.listId }
 
             _items.value = filtered
