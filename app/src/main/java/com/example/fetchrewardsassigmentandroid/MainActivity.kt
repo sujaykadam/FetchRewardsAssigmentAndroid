@@ -7,6 +7,7 @@ import com.example.fetchrewardsassigmentandroid.adapters.GroupedItemAdapter
 import com.example.fetchrewardsassigmentandroid.databinding.ActivityMainBinding
 import com.example.fetchrewardsassigmentandroid.viewmodels.ItemViewModel
 import androidx.activity.viewModels
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +23,12 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.items.observe(this) {
             binding.mainRecyclerView.adapter = GroupedItemAdapter(it)
+        }
+
+        viewModel.error.observe(this) { errorMsg ->
+            errorMsg?.let {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
         }
 
         viewModel.fetchItems()
